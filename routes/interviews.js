@@ -1,6 +1,6 @@
 const express = require('express');
 const {getInterviews,getInterview, addInterview, updateInterview,deleteInterview} = require('../controllers/interviews');
-const {authorize,protect} = require('../controllers/auth');
+const {authorize,protect} = require('../middleware/auth');
 
 const router = express.Router({mergeParams:true});
 router.route('/').get(protect,getInterviews).
