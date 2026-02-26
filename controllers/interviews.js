@@ -78,17 +78,7 @@ exports.addInterview = async (req, res, next) => {
                 message: `No company with the id of ${req.params.companyId}`
             });
         }
-        const startDate = new Date('2022-05-10');
-        const endDate = new Date('2022-05-13');
 
-        const interviewDate = new Date(req.body.date);
-
-        if (interviewDate < startDate || interviewDate > endDate) {
-            return res.status(400).json({
-                success: false,
-                message: 'Interview date must be between May 10-13, 2022'
-            });
-        }
         req.body.user = req.user.id;
 
         const existedInterviews = await Interview.find({ user: req.user.id });
