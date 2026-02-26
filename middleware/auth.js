@@ -18,10 +18,3 @@ exports.protect = async(req,res,next)=>{
         return res.status(401).json({success:false,message:"Not authorize to access this route"});
     }
 }
-exports.getMe=async(req,res,next)=>{
-    const user=await User.findById(req.user.id);
-    res.status(200).json({
-        success:true,data:user
-        
-    });
-}
