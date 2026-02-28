@@ -103,3 +103,54 @@ exports.logout = async(req,res,next) => {
         data:{}
     });
 }
+
+exports.changePassword = async (req, res, next) => {
+    try {
+        const {oldPassword,newPassword} = req.body;
+        const user = await User.findById(req.user.id).select('+password');
+        if(!oldPassword){
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide old password'
+            });
+        }
+        const isSame = await user.matchPassword(newPassword);
+
+        if (isSame) {
+            return res.status(400).json({
+                success: false,
+                message: 'New password must be different from current password'
+            });
+        }
+        
+        if (!newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide new [assword'
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'New password must be at least 6 characters'
+            });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Password changed successfully'
+        });
+
+    } catch (err) {
+        console.log(err.stack);
+        return res.status(500).json({
+            success: false,
+            message: 'Cannot change password'
+        });
+    }
+}
+

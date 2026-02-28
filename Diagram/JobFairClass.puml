@@ -1,0 +1,102 @@
+@startuml
+left to right direction
+
+skinparam packageBackgroundColor #ede9f6
+skinparam packageBorderColor #9b8ec4
+skinparam packageFontSize 13
+
+skinparam class {
+    BackgroundColor<<Application>> #fffacd
+    BorderColor<<Application>>     #b8a600
+    BackgroundColor<<Resource>>    #d6ecd2
+    BorderColor<<Resource>>        #6aaa5e
+    BackgroundColor<<Representation>> #d6ecd2
+    BorderColor<<Representation>>     #6aaa5e
+    HeaderBackgroundColor<<Application>> #fffacd
+    HeaderBackgroundColor<<Resource>>    #d6ecd2
+    HeaderBackgroundColor<<Representation>> #d6ecd2
+    FontSize 13
+}
+
+skinparam ArrowColor #555555
+skinparam ArrowThickness 1.2
+skinparam classAttributeFontSize 12
+skinparam classFontStyle bold
+
+package "Online Job Fair Registration" {
+
+    class "<<Application>>\nInterviewService" as App <<Application>> {
+    }
+
+    class "<<Resource>>\nAuth" as ResAuth <<Resource>> {
+        <<POST>> +register() : User
+        <<POST>> +login() : Token
+        <<GET>>  +logout() : void
+        <<GET>>  +getMe() : User
+    }
+
+    class "<<Resource>>\nCompanies" as ResCompanies <<Resource>> {
+        <<GET>>  +getCompanies() : Company
+        <<POST>> +createCompany() : Company
+    }
+
+    class "<<Resource>>\nCompany" as ResCompany <<Resource>> {
+        <<GET>>    +getCompany() : Company
+        <<PUT>>    +updateCompany() : Company
+        <<DELETE>> +deleteCompany() : void
+    }
+
+    class "<<Resource>>\nInterviews" as ResInterviews <<Resource>> {
+        <<GET>>  +getInterviews() : Interview
+        <<POST>> +createInterview() : Interview
+    }
+
+    class "<<Resource>>\nInterview" as ResInterview <<Resource>> {
+        <<GET>>    +getInterview() : Interview
+        <<PUT>>    +updateInterview() : Interview
+        <<DELETE>> +deleteInterview() : void
+    }
+
+    class "<<Representation>>\nUser" as RepUser <<Representation>> {
+        - name
+        - email
+        - tel
+        - role
+        - password
+        - createdAt
+    }
+
+    class "<<Representation>>\nCompany" as RepCompany <<Representation>> {
+        - name
+        - address
+        - district
+        - province
+        - postalcode
+        - tel
+        - website
+        - description
+    }
+
+    class "<<Representation>>\nInterview" as RepInterview <<Representation>> {
+        - sessionDate
+        - user
+        - company
+    }
+
+}
+
+App         ..> ResAuth        : "/auth\n<<Path>>"
+App         ..> ResCompanies   : "/companies\n<<Path>>"
+App         ..> ResInterviews  : "/interviews\n<<Path>>"
+
+ResAuth     ..> RepUser        : "<<use>>"
+
+ResCompanies ..> ResCompany    : "/{companyId}\n<<Path>>"
+ResCompanies ..> RepCompany    : "<<use>>"
+ResCompany   ..> RepCompany    : "<<use>>"
+
+ResCompany   ..> ResInterviews : "/interviews\n<<Path>>"
+ResInterviews ..> ResInterview : "/{id}\n<<Path>>"
+ResInterviews ..> RepInterview : "<<use>>"
+ResInterview  ..> RepInterview : "<<use>>"
+@enduml
