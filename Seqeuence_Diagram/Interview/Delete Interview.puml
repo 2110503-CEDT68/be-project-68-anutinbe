@@ -1,0 +1,21 @@
+@startuml DeleteInterview (DELETE)
+
+header Sameple VacQ Sequence Diagram
+footer Page %page% of %lastpage%
+title "Delete Interview (DELETE)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:interviews" as routerInterviews
+participant "<<controllers>>\n:interviews" as controllersInterviews
+participant "<<model>>\n:Interview" as modelInterview
+database "<<MongoDB>>\n:interviews" as InterviewsDatabase
+
+client->server ++:req.delete('/api/v1/interviews/:id')
+server->routerInterviews ++:app.use('/api/v1/interviews',interviews)
+routerInterviews -> controllersInterviews ++:deleteInterview()
+controllersInterviews->modelInterview ++:deleteOne(id)
+modelInterview ->InterviewsDatabase ++: InterviewSchema
+controllersInterviews->client --:response
+
+@enduml

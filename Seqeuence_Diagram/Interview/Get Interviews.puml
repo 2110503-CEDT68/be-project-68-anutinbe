@@ -1,0 +1,23 @@
+@startuml GetInterviews (GET)
+
+header Sameple VacQ Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Interviews (GET)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:interviews" as routerInterviews
+participant "<<controllers>>\n:interviews" as controllersInterviews
+participant "<<model>>\n:Interview" as modelInterview
+database "<<MongoDB>>\n:interviews" as InterviewsDatabase
+
+client->server ++:req.get('/api/v1/interviews')
+server->routerInterviews ++:app.use('/api/v1/interviews',interviews)
+routerInterviews -> controllersInterviews ++:getInterviews()
+controllersInterviews->modelInterview ++:find()
+modelInterview ->InterviewsDatabase ++: InterviewSchema
+InterviewsDatabase --> modelInterview --: interviews
+controllersInterviews <-- modelInterview --: interviews
+controllersInterviews->client --:response
+
+@enduml
