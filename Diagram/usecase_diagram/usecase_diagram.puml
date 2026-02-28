@@ -1,0 +1,33 @@
+@startuml Online Job Fair Registration System Use Case Diagram
+left to right direction
+actor  "User" as User
+rectangle "Online Job Fair Registration System" {
+    usecase UC1 as "Register"/'u'/
+    usecase UC2 as "Login"/'u,a'/
+    usecase UC3 as "Logout"/'ua'/
+    usecase UC4 as "View Profile"/'ua'/
+    usecase UC5 as "Change Password"/'ua'/
+    usecase UC6 as "Manage Companies"/'a'/
+    usecase UC7 as "View Companies"/'ua'/
+    usecase UC8 as "Manage Interview"
+}
+
+User -- UC1
+User -- UC2
+User -- UC3
+User -- UC4
+User -- UC5
+User -- UC7
+User -- UC8
+
+
+actor  "Admin" as Admin
+
+UC1 -- Admin
+UC2 -- Admin
+UC3 -- Admin
+UC4 -- Admin
+UC5 -- Admin
+UC6 -- Admin
+UC8 -- Admin
+@enduml
