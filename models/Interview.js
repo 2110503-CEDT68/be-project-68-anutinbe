@@ -7,9 +7,9 @@ const InterviewSchema = new mongoose.Schema({
         validate: {
             validator: function(value) {    
             const startDate = new Date('2022-05-10');
-            const endDate = new Date('2022-05-13');
+            const endDate = new Date('2022-05-14');
 
-            return value >= startDate && value <= endDate;
+            return value >= startDate && value < endDate;
             },
             message: 'Interview date must be between May 10-13, 2022'
         }
