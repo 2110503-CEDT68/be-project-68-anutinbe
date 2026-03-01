@@ -1,0 +1,80 @@
+@startuml
+left to right direction
+package "Interview Booking System"{
+
+    class "<<Application>>\nInterviewService" as InterviewService{}
+
+    class "<<Resource>>\nUsers" as ResourceUsers{
+        <<POST>> +register():User
+        <<POST>> +login():Token
+    }
+
+    class "<<Resource>>\nUser" as ResourceUser{
+        <<GET>> +getMe():User
+        <<GET>> +logout():void
+    }
+
+    class "<<Resource>>\nCompanies" as ResourceCompanies{
+        <<GET>> +getCompanies():Company
+        <<POST>> +createCompany():Company
+    }
+
+    class "<<Resource>>\nCompany" as ResourceCompany{
+        <<GET>> +getCompany():Company
+        <<PUT>> +updateCompany():Company
+        <<DELETE>> +deleteCompany():void
+    }
+
+    class "<<Resource>>\nInterviews" as ResourceInterviews{
+        <<GET>> +getInterviews():Interview
+        <<POST>> +createInterview():Interview
+    }
+
+    class "<<Resource>>\nInterview" as ResourceInterview{
+        <<GET>> +getInterview():Interview
+        <<PUT>> +updateInterview():Interview
+        <<DELETE>> +deleteInterview():void
+    }
+
+    class "<<Representation>>\nUser" as RepresentationUser{
+        -name
+        -email
+        -tel
+        -role
+        -password
+        -createdAt
+    }
+
+    class "<<Representation>>\nCompany" as RepresentationCompany{
+        -name
+        -addr
+        -province
+        -tel
+        -description
+    }
+
+    class "<<Representation>>\nInterview" as RepresentationInterview{
+        -sessionDate
+        -user
+        -company
+    }
+
+}
+
+InterviewService ..> ResourceUsers       : "/auth\n<<Path>>"
+InterviewService ..> ResourceCompanies   : "/companies\n<<Path>>"
+
+ResourceUsers    ..> ResourceUser        : "/me, /logout\n<<Path>>"
+ResourceUser     ..> RepresentationUser  : "<<use>>"
+ResourceUsers    ..> RepresentationUser  : "<<use>>"
+
+ResourceCompanies ..> ResourceCompany   : "/{companyId}\n<<Path>>"
+ResourceCompany   ..> RepresentationCompany : "<<use>>"
+ResourceCompanies ..> RepresentationCompany : "<<use>>"
+
+ResourceCompany   ..> ResourceInterviews : "/interviews\n<<Path>>"
+ResourceInterviews ..> ResourceInterview : "/{id}\n<<Path>>"
+ResourceInterview  ..> RepresentationInterview : "<<use>>"
+ResourceInterviews ..> RepresentationInterview : "<<use>>"
+
+@enduml
